@@ -54,11 +54,13 @@ export default function CalendarSimple({ events = [], onOpenPlan, onOpenUpload }
     gridEnd.setDate(mEnd.getDate() + (6 - mEnd.getDay()));
 
     const out = [];
-    const it = new Date(gridStart);
 
-    while (it <= gridEnd) {
-      out.push(new Date(it));
-      it.setDate(it.getDate() + 1);
+    for (
+      let current = new Date(gridStart);
+      current <= gridEnd;
+      current = new Date(current.getFullYear(), current.getMonth(), current.getDate() + 1)
+    ) {
+      out.push(new Date(current));
     }
 
     const monthName = cursor.toLocaleDateString("es-MX", {
