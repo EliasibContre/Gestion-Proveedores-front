@@ -1,3 +1,4 @@
+// src/pages/auth/Login.jsx
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthAPI } from "../../api/auth.api";
@@ -10,6 +11,7 @@ function Login() {
   const [showForgot, setShowForgot] = useState(false);
   const [showRequestAccess, setShowRequestAccess] = useState(false);
 
+  // Campos iniciales vacíos para captura de credenciales ingresadas por el usuario
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [forgotEmail, setForgotEmail] = useState("");
   const [requestAccessData, setRequestAccessData] = useState({
@@ -101,6 +103,7 @@ function Login() {
     clearAlert();
 
     try {
+      // La contraseña se envía dinámicamente desde la captura del usuario, no desde un valor fijo en el código
       const res = await AuthAPI.loginStart({
         email: formData.email.trim().toLowerCase(),
         password: formData.password,

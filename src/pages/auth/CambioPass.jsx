@@ -9,7 +9,8 @@ function normalizeRoles(rawRoles) {
   return rawRoles
     .map((r) => {
       if (typeof r === "string") return r.toUpperCase();
-      if (r && typeof r === "object" && r.name) return String(r.name).toUpperCase();
+      if (r && typeof r === "object" && r.name)
+        return String(r.name).toUpperCase();
       return "";
     })
     .filter(Boolean);
@@ -34,6 +35,7 @@ function CambioPass() {
 
   const [checkingAccess, setCheckingAccess] = useState(true);
 
+  // Campos vacíos para captura dinámica de nueva contraseña y confirmación
   const [formData, setFormData] = useState({
     nuevaPassword: "",
     confirmarPassword: "",
@@ -83,8 +85,10 @@ function CambioPass() {
 
   const goToDashboardByRole = (roles = []) => {
     if (roles.includes("ADMIN")) return navigate("/admin", { replace: true });
-    if (roles.includes("APPROVER")) return navigate("/approver", { replace: true });
-    if (roles.includes("PROVIDER")) return navigate("/provider", { replace: true });
+    if (roles.includes("APPROVER"))
+      return navigate("/approver", { replace: true });
+    if (roles.includes("PROVIDER"))
+      return navigate("/provider", { replace: true });
     return navigate("/login", { replace: true });
   };
 
@@ -102,11 +106,13 @@ function CambioPass() {
     }
   };
 
-  const validatePassword = (password) => {
-    const hasMinLength = password.length >= 8;
-    const hasLetters = /[a-zA-Z]/.test(password);
-    const hasNumbers = /[0-9]/.test(password);
-    const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
+  const validatePassword = (inputValue) => {
+    const hasMinLength = inputValue.length >= 8;
+    const hasLetters = /[a-zA-Z]/.test(inputValue);
+    const hasNumbers = /[0-9]/.test(inputValue);
+    const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(
+      inputValue,
+    );
 
     return {
       isValid: hasMinLength && hasLetters && hasNumbers && hasSpecialChar,
@@ -121,7 +127,7 @@ function CambioPass() {
 
   const passwordValidation = useMemo(
     () => validatePassword(formData.nuevaPassword),
-    [formData.nuevaPassword]
+    [formData.nuevaPassword],
   );
 
   const validateForm = () => {
@@ -186,7 +192,9 @@ function CambioPass() {
 
       try {
         const meRes = await AuthAPI.me();
-        roles = normalizeRoles(meRes?.data?.user?.roles || meRes?.user?.roles || []);
+        roles = normalizeRoles(
+          meRes?.data?.user?.roles || meRes?.user?.roles || [],
+        );
       } catch (err) {
         if (err?.response?.status !== 401) {
           throw err;
@@ -242,7 +250,8 @@ function CambioPass() {
 
             {isResetMode && email ? (
               <p className="text-xs text-midBlue mt-2">
-                Cuenta: <span className="font-semibold text-darkBlue">{email}</span>
+                Cuenta:{" "}
+                <span className="font-semibold text-darkBlue">{email}</span>
               </p>
             ) : null}
           </div>
@@ -277,7 +286,9 @@ function CambioPass() {
                   type="button"
                   onClick={() => setShowPassword((s) => !s)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-darkBlue focus:outline-none"
-                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  aria-label={
+                    showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
                 >
                   {showPassword ? (
                     <svg
@@ -333,7 +344,9 @@ function CambioPass() {
               ) : null}
 
               {errors.nuevaPassword ? (
-                <p className="text-red-500 text-xs mt-1">{errors.nuevaPassword}</p>
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.nuevaPassword}
+                </p>
               ) : null}
             </div>
 
@@ -361,7 +374,9 @@ function CambioPass() {
                   onClick={() => setShowConfirmPassword((s) => !s)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-darkBlue focus:outline-none"
                   aria-label={
-                    showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                    showConfirmPassword
+                      ? "Ocultar contraseña"
+                      : "Mostrar contraseña"
                   }
                 >
                   {showConfirmPassword ? (
@@ -397,7 +412,9 @@ function CambioPass() {
               </div>
 
               {errors.confirmarPassword ? (
-                <p className="text-red-500 text-xs mt-1">{errors.confirmarPassword}</p>
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.confirmarPassword}
+                </p>
               ) : null}
             </div>
 
@@ -434,7 +451,9 @@ function CambioPass() {
                 Tu contraseña ha sido actualizada exitosamente.
               </p>
 
-              <div className="text-center text-midBlue text-xs">Redirigiendo...</div>
+              <div className="text-center text-midBlue text-xs">
+                Redirigiendo...
+              </div>
             </div>
           </div>
         </div>
@@ -454,7 +473,9 @@ function CambioPass() {
 function Req({ ok, text }) {
   return (
     <div className="flex items-center gap-2">
-      <div className={`w-2 h-2 rounded-full ${ok ? "bg-green-500" : "bg-red-500"}`} />
+      <div
+        className={`w-2 h-2 rounded-full ${ok ? "bg-green-500" : "bg-red-500"}`}
+      />
       <span className={`text-xs ${ok ? "text-green-600" : "text-red-600"}`}>
         {text}
       </span>
